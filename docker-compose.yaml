@@ -1,0 +1,96 @@
+x-backend: &backend
+  image: backend
+  build:
+    context: backend
+    dockerfile: Dockerfile
+  networks:
+    - main
+  links:
+    - db:db
+  environment:
+    - DEBUG=False
+    - SECRET_KEY
+
+    - POSTGRES_DB
+    - POSTGRES_USER
+    - POSTGRES_PASSWORD
+    - POSTGRES_HOST=db
+
+x-frontend: &frontend
+  build:
+    context: frontend
+    dockerfile: Dockerfile
+  networks:
+    - main
+  links:
+    - backend:backend
+  environment:
+    - NEXT_PUBLIC__ASSEMBLY_AI_API_KEY
+    - SERVER_API_URL=http://backend:8000
+
+services:
+  db:
+    container_name: postgres
+    restart: always
+    image: postgres:latest
+    networks:
+      - main
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    ports:
+      - "5432"
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+
+  backend:
+    <<: *backend
+    container_name: backend
+    ports:
+      - "8000"
+
+  frontend:
+    <<: *frontend
+    ports:
+      - "3000"
+
+  nginx:
+    container_name: nginx
+    networks:
+      - main
+    ports:
+      - "80:80"
+      - "443:443"
+    image: ats_nginx
+    links:
+      - backend:backend
+      - frontend:frontend
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    command: [nginx-debug, '-g', 'daemon off;']
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/letsencrypt/:ro
+
+  certbot:
+    container_name: certbot
+    image: cf-certbot
+    env_file:
+      - .env
+    build:
+      context: certbot
+      dockerfile: Dockerfile
+      args:
+        - CLOUDFLARE_API_TOKEN
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+
+volumes:
+  pg-data:
+
+networks:
+  main:
+#    driver: host
