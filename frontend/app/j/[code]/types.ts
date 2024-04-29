@@ -38,6 +38,8 @@ export type JobType = {
   salaryInformation: 0 | 1 | 2,
   minSalary: number | null,
   maxSalary: number | null,
+  salaryCurrency: string,
+  salaryTimeframe: 'HOURLY' | 'DAILY' | 'WEEKLY' | 'MONTHLY' | 'YEARLY',
   minExperienceYears: number | null,
   idealExperienceYears: number | null,
   formSections: {

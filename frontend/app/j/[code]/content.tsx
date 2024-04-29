@@ -1,5 +1,5 @@
 'use client';
-import React from "react";
+import React, { useState } from "react";
 import { MarkdownViewer } from 'react-github-markdown';
 import {Badge, Button, useCurrencyFormatter} from "chaya-ui";
 import { format, parseISO } from "date-fns";
@@ -7,11 +7,18 @@ import clsx from "clsx";
 
 import { JobType, JobPageParams } from "@/app/j/[code]/types";
 
+const SALARY_TIMEFRAME_INDICATOR_MAP = {
+  HOURLY: '/hour',
+  DAILY: '/day',
+  WEEKLY: '/week',
+  MONTHLY: '/month',
+  YEARLY: '/year'
+}
 
 const ContentView = ({ job, params }: { job: JobType, params: JobPageParams }) => {
 
   const formatCurrency = useCurrencyFormatter();
-  const [showAllSkills, setShowAllSkills] = React.useState(false);
+  const [showAllSkills, setShowAllSkills] = useState(false);
 
   return (
     <div className="bg-neutral-50 min-h-[75vh]">
@@ -100,15 +107,18 @@ const ContentView = ({ job, params }: { job: JobType, params: JobPageParams }) =
                     <i className="ri-hand-coin-fill mr-1"/>{" "}
                     Compensation
                   </h4>
-                  {job.salaryInformation == 1 && job?.minSalary ? (
-                    <div className="text-sm">
-                      {formatCurrency(job?.minSalary ?? 0, 'INR', 0)}
-                    </div>
-                  ) : job.salaryInformation == 2 && job?.minSalary && job?.maxSalary ? (
-                    <div className="text-sm">
-                      {`${formatCurrency(job?.minSalary ?? 0, 'INR', 0)} - ${formatCurrency(job.maxSalary ?? 0, 'INR', 0)}`}
-                    </div>
-                  ) : null}
+                  <div className="flex gap-0.5 text-sm">
+                    {job.salaryInformation == 1 && job?.minSalary ? (
+                      <div>
+                        {formatCurrency(job?.minSalary ?? 0, job?.salaryCurrency ?? 'INR', 0)}
+                      </div>
+                    ) : job.salaryInformation == 2 && job?.minSalary && job?.maxSalary ? (
+                      <div>
+                        {`${formatCurrency(job?.minSalary ?? 0, job?.salaryCurrency ?? 'INR', 0)} - ${formatCurrency(job.maxSalary ?? 0, job?.salaryCurrency ?? 'INR', 0)}`}
+                      </div>
+                    ) : null}
+                    {SALARY_TIMEFRAME_INDICATOR_MAP[job?.salaryTimeframe]}
+                  </div>
                 </div>
               ) : null}
             </div>

@@ -44,6 +44,21 @@ class Job(models.Model):
     # _minSalary is considered as the fixed Salary, when salaryInformation is 1 (Fixed)
     _minSalary = models.PositiveIntegerField(null=True, blank=True)
     _maxSalary = models.PositiveIntegerField(null=True, blank=True)
+    salaryTimeframe = models.CharField(
+        max_length=10,
+        choices=[
+            ('HOURLY', 'Hourly'),
+            ('DAILY', 'Daily'),
+            ('WEEKLY', 'Weekly'),
+            ('MONTHLY', 'Monthly'),
+            ('YEARLY', 'Yearly')
+        ],
+        default='YEARLY'
+    )
+    salaryCurrency = models.CharField(
+        max_length=5,
+        default='USD'
+    )
 
     minExperienceYears = models.PositiveIntegerField(null=True, blank=True)
     idealExperienceYears = models.PositiveIntegerField(null=True, blank=True)

@@ -21,7 +21,7 @@ class JobListingSerializer(serializers.HyperlinkedModelSerializer):
             'id', 'title', 'jobID', 'locations', 'department',
             'workplaceModels', 'workType', 'minExperienceYears', 'idealExperienceYears',
             'skills', 'timestampPosted', 'isAcceptingApplications', 'salaryInformation',
-            'minSalary', 'maxSalary',
+            'minSalary', 'maxSalary', 'salaryTimeframe', 'salaryCurrency',
         ]
 
 

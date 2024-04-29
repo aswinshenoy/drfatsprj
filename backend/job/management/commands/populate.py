@@ -157,6 +157,8 @@ class Command(BaseCommand):
                 salaryInformation=job.get('salaryInformation', 0) if 'salaryInformation' in job else 0,
                 _minSalary=job.get('_minSalary', None) if '_minSalary' in job else None,
                 _maxSalary=job.get('_maxSalary', None) if '_maxSalary' in job else None,
+                salaryTimeframe=job.get('salaryTimeframe', 'YEARLY') if 'salaryTimeframe' in job else 'YEARLY',
+                salaryCurrency=job.get('salaryCurrency', 'USD') if 'salaryCurrency' in job else 'USD',
                 timestampPosted=timezone.now() - timezone.timedelta(days=fake.random_int(0, 30), hours=fake.random_int(0, 23), minutes=fake.random_int(0, 59))
             )
             j.save()
