@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import { Button } from "chaya-ui";
 import axios from "axios";
 
-import {JobType} from "@/app/j/[code]/types";
+import { JobType, JobPageParams } from "@/app/j/[code]/types";
 import {ApplicationDataType} from "./types";
 import ProfileForm from "@/app/j/[code]/apply/form/Profile";
 import EmploymentInfoForm from "@/app/j/[code]/apply/form/ExperienceSkill";
@@ -11,7 +11,7 @@ import FormFields from "@/app/j/[code]/apply/form/form";
 import ProfileImporter from "@/app/j/[code]/apply/form/importer";
 import Stepper from "@/app/shared/Stepper";
 
-const JobApplicationForm = ({ job }: { job: JobType }) => {
+const JobApplicationForm = ({ job, params }: { job: JobType, params: JobPageParams }) => {
 
   const [data, setData] = useState<ApplicationDataType>({
     firstName: '',
@@ -67,7 +67,8 @@ const JobApplicationForm = ({ job }: { job: JobType }) => {
             expectedSalary: data.expectedSalary,
             monthsOfExperience: ((data.experienceYears ?? 0) * 12) + (data.experienceMonths ?? 0)
           },
-          formData: data.formData
+          formData: data.formData,
+          source: params?.source ?? null,
         }
       ).then(({ data }) => {
         setIsSubmitting(false);

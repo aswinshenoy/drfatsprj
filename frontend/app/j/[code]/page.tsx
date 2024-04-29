@@ -4,7 +4,7 @@ import {notFound} from "next/navigation";
 import Fetch from "@/app/utils/fetch";
 import JobHeader from "@/app/j/[code]/header";
 import ContentView from "@/app/j/[code]/content";
-import {JobFetchType} from "@/app/j/[code]/types";
+import {JobFetchType, JobPageParams} from "@/app/j/[code]/types";
 
 export const generateMetadata = async ({ params }: { params: { code: string } }) => {
   const {
@@ -28,7 +28,7 @@ export const generateMetadata = async ({ params }: { params: { code: string } })
   };
 }
 
-const JobPage = async ({ params }: { params: { code: string } }) => {
+const JobPage = async ({ params, searchParams }: { params: { code: string }, searchParams: JobPageParams }) => {
 
   const {
     data: job,
@@ -40,10 +40,10 @@ const JobPage = async ({ params }: { params: { code: string } }) => {
   return (
     <div className="flex flex-col min-h-[100vh] justify-between gap-2">
       <section className="container max-w-[1000px] mx-auto">
-        <JobHeader job={job}/>
+        <JobHeader job={job} params={searchParams} />
       </section>
       <section className="flex flex-col min-h-[50vh] justify-between gap-2">
-        <ContentView job={job} />
+        <ContentView job={job} params={searchParams} />
       </section>
     </div>
   );

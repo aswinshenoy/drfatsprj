@@ -1,7 +1,7 @@
 import React from "react";
 import {notFound} from "next/navigation";
 
-import { JobFetchType } from "@/app/j/[code]/types";
+import {JobFetchType, JobPageParams} from "@/app/j/[code]/types";
 import Fetch from "@/app/utils/fetch";
 
 import ApplyJobHeader from "./header";
@@ -29,7 +29,7 @@ export const generateMetadata = async ({ params }: { params: { code: string } })
   };
 }
 
-const ApplyJobPage = async ({ params }: { params: { code: string } }) => {
+const ApplyJobPage = async ({ params, searchParams }: { params: { code: string }, searchParams: JobPageParams }) => {
 
   const {
     data: job,
@@ -42,11 +42,11 @@ const ApplyJobPage = async ({ params }: { params: { code: string } }) => {
     <div className="flex flex-col">
       <div className="shadow-lg mb-2 border-y border-neutral-400/30">
         <section className="container max-w-[900px] mx-auto">
-          <ApplyJobHeader job={job}/>
+          <ApplyJobHeader job={job} />
         </section>
       </div>
       <section className="flex flex-col justify-between gap-2">
-        <JobApplicationForm job={job}/>
+        <JobApplicationForm job={job} params={searchParams} />
       </section>
     </div>
   );

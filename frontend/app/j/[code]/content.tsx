@@ -3,12 +3,12 @@ import React from "react";
 import { MarkdownViewer } from 'react-github-markdown';
 import {Badge, Button, useCurrencyFormatter} from "chaya-ui";
 import { format, parseISO } from "date-fns";
-
-import {JobType} from "@/app/j/[code]/types";
 import clsx from "clsx";
 
+import { JobType, JobPageParams } from "@/app/j/[code]/types";
 
-const ContentView = ({ job }: { job: JobType }) => {
+
+const ContentView = ({ job, params }: { job: JobType, params: JobPageParams }) => {
 
   const formatCurrency = useCurrencyFormatter();
   const [showAllSkills, setShowAllSkills] = React.useState(false);
@@ -24,7 +24,7 @@ const ContentView = ({ job }: { job: JobType }) => {
             />
             <div className="p-3 mt-6">
               <Button
-                link={`/j/${job.jobID}/apply`}
+                link={`/j/${job.jobID}/apply${params.source ? `?source=${params.source}` : ''}`}
                 className="group"
               >
                 Apply Now

@@ -5,7 +5,6 @@ import {Badge} from "chaya-ui";
 
 const ApplyJobHeader = ({ job }: { job: JobType }) => (
   <div className="flex flex-row mx-0 justify-between items-center h-fit border-l border-neutral-400/30">
-
     <Link href={`/j/${job.jobID}`} className="items-center hover:text-primary h-full inline-flex text-3xl gap-2">
       <div className="p-4 h-full w-[72px] md:w-[120px] flex items-center justify-center">
         <i className="ri-arrow-left-line"/>

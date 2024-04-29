@@ -30,6 +30,8 @@ class Application(models.Model):
     timestampApplied = models.DateTimeField(default=timezone.now)
     timestampStatusUpdated = models.DateTimeField(null=True, blank=True)
 
+    source = models.CharField(max_length=100, null=True, blank=True)
+
     class Meta:
         db_table = 'applications'
         verbose_name = 'Application'

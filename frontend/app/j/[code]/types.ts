@@ -51,3 +51,7 @@ export type JobFetchType = {
   data: JobType | null
   error: string | null
 }
+
+export type JobPageParams = {
+  source: string | null
+};

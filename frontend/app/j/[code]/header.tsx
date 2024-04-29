@@ -2,10 +2,10 @@ import React from "react";
 import {Badge, Button} from "chaya-ui";
 import Link from "next/link";
 
-import {JobType} from "@/app/j/[code]/types";
+import { JobType, JobPageParams } from "@/app/j/[code]/types";
 
 
-const JobHeader = ({ job }: { job: JobType }) => (
+const JobHeader = ({ job, params }: { job: JobType, params: JobPageParams }) => (
   <div className="p-3 md:p-4 lg:p-5 flex flex-wrap mx-0 justify-between items-center">
     <div className="w-full md:w-2/3 p-2 flex flex-col justify-center min-h-[15vh] gap-4">
       <div>
@@ -61,7 +61,7 @@ const JobHeader = ({ job }: { job: JobType }) => (
     </div>
     <div className="w-full md:w-1/3 flex md:justify-end p-2">
         <Button
-          link={`/j/${job.jobID}/apply`}
+          link={`/j/${job.jobID}/apply${params.source ? `?source=${params.source}` : ''}`}
           className="group"
         >
           Apply Now

@@ -23,7 +23,7 @@ class ApplicationSubmitSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Application
         fields = [
-            'id', 'job', 'candidate', 'formData'
+            'id', 'job', 'candidate', 'formData', 'source'
         ]
 
 
