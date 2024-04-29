@@ -17,11 +17,19 @@ def jobs_api(request):
 
         if 'location' in request.GET:
             location = request.GET['location']
-            jobs = jobs.filter(location__id=location)
+            jobs = jobs.filter(locations__id=location)
 
         if 'department' in request.GET:
             department = request.GET['department']
             jobs = jobs.filter(department__id=department)
+
+        if 'workType' in request.GET:
+            workType = request.GET['workType']
+            jobs = jobs.filter(workType__id=workType)
+
+        if 'workplaceModel' in request.GET:
+            workplaceModel = request.GET['workplaceModel']
+            jobs = jobs.filter(workplaceModels__id=workplaceModel)
 
         serializer = JobListingSerializer(jobs, many=True)
         return JsonResponse(serializer.data, safe=False)

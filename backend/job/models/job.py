@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+from typing import Optional
 
 
 class Job(models.Model):
@@ -33,6 +33,18 @@ class Job(models.Model):
         null=True, blank=True
     )
 
+    salaryInformation = models.PositiveSmallIntegerField(
+        choices=[
+            (0, 'Hidden'),
+            (1, 'Fixed'),
+            (2, 'Range')
+        ],
+        default=0
+    )
+    # _minSalary is considered as the fixed Salary, when salaryInformation is 1 (Fixed)
+    _minSalary = models.PositiveIntegerField(null=True, blank=True)
+    _maxSalary = models.PositiveIntegerField(null=True, blank=True)
+
     minExperienceYears = models.PositiveIntegerField(null=True, blank=True)
     idealExperienceYears = models.PositiveIntegerField(null=True, blank=True)
 
@@ -44,7 +56,31 @@ class Job(models.Model):
 
     formSections = models.JSONField(default=dict)
 
-    timestampPosted = models.DateTimeField(default=timezone.now)
+    # when timestampPosted is not set, the job is not visible on the job board or with links
+    timestampPosted = models.DateTimeField(null=True, blank=True)
+    # when timestampClosed is set, the job is closed for applications, but still visible on the job board or with links
+    timestampClosed = models.DateTimeField(null=True, blank=True)
+    # when timestampArchived is set, the job is archived and not visible on the job board or with links
+    timestampArchived = models.DateTimeField(null=True, blank=True)
+
+    @property
+    def isAcceptingApplications(self) -> bool:
+        return (
+            self.timestampPosted is not None
+            and self.timestampClosed is None
+            and self.timestampArchived is None
+        )
+
+    @property
+    def minSalary(self) -> Optional[int]:
+        if self.salaryInformation > 0:
+            return self._minSalary
+
+    @property
+    def maxSalary(self) -> Optional[int]:
+        if self.salaryInformation == 2:
+            return self._maxSalary
+        return self.minSalary
 
     def _set_jobID(self):
         from uuid import uuid4

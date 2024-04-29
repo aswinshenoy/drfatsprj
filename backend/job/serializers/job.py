@@ -20,7 +20,8 @@ class JobListingSerializer(serializers.HyperlinkedModelSerializer):
         fields = [
             'id', 'title', 'jobID', 'locations', 'department',
             'workplaceModels', 'workType', 'minExperienceYears', 'idealExperienceYears',
-            'skills', 'timestampPosted',
+            'skills', 'timestampPosted', 'isAcceptingApplications', 'salaryInformation',
+            'minSalary', 'maxSalary',
         ]
 
 

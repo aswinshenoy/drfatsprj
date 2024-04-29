@@ -10,7 +10,7 @@ type HomePageParams = {
     location?: string;
     department?: string;
     workplaceModel?: string;
-    workplaceType?: string;
+    workType?: string;
   }
 };
 
@@ -19,7 +19,7 @@ const HomePage = async ({ searchParams }: HomePageParams) => {
   const locations: FilterTypeData[] = await Fetch("/api/locations", true).then(({ data }) => data?.results);
   const departments: DepartmentType[] = await Fetch("/api/departments", true).then(({ data }) => data?.results);
   const workplaceModels: FilterTypeData[] = await Fetch("/api/workplace-models", true).then(({ data }) => data);
-  const workplaceTypes: FilterTypeData[] = await Fetch("/api/worktypes", true).then(({ data }) => data);
+  const workTypes: FilterTypeData[] = await Fetch("/api/worktypes", true).then(({ data }) => data);
 
   const getQuery = () => {
     const query = new URLSearchParams();
@@ -29,6 +29,10 @@ const HomePage = async ({ searchParams }: HomePageParams) => {
       query.set("department", searchParams.department);
     if(searchParams.location)
       query.set("location", searchParams.location);
+    if(searchParams.workType)
+      query.set("workType", searchParams.workType);
+    if(searchParams.workplaceModel)
+      query.set("workplaceModel", searchParams.workplaceModel);
     return query.toString();
   }
 
@@ -39,11 +43,18 @@ const HomePage = async ({ searchParams }: HomePageParams) => {
 
   return (
       <JobsView
+        filters={{
+          keyword: searchParams.keyword,
+          location: searchParams.location,
+          department: searchParams.department,
+          workplaceModel: searchParams.workplaceModel,
+          workType: searchParams.workType
+        }}
         jobs={jobs}
         departments={departments}
         locations={locations}
         workplaceModels={workplaceModels}
-        workplaceTypes={workplaceTypes}
+        workTypes={workTypes}
       />
   );
 

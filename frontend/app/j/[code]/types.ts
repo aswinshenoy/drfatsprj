@@ -35,6 +35,11 @@ export type JobType = {
     id: string
     name: string
   }[],
+  salaryInformation: 0 | 1 | 2,
+  minSalary: number | null,
+  maxSalary: number | null,
+  minExperienceYears: number | null,
+  idealExperienceYears: number | null,
   formSections: {
     title: string,
     description: string,

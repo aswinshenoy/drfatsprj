@@ -1,6 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Sora } from "next/font/google";
 import Providers from "@/app/Providers";
 import Footer from "@/app/footer";
 
@@ -8,7 +8,7 @@ import 'remixicon/fonts/remixicon.css';
 import "./globals.css";
 import Header from "@/app/header";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Sora({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Jolibi: Recruiting Made Easy",
@@ -21,7 +21,7 @@ const RootLayout = ({ children }: Readonly<{
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={font.className}>
         <Providers>
           <div className="flex justify-between min-h-[100vh] flex-col">
             <Header />

@@ -1,3 +1,4 @@
+from django.utils import timezone
 from faker import Faker
 from django.core.management.base import BaseCommand
 
@@ -141,6 +142,8 @@ class Command(BaseCommand):
                 skills.append(Skill(name=skill))
         Skill.objects.bulk_create(skills)
 
+        fake = Faker()
+
         jobs = []
         for job in JOBS:
             j = Job(
@@ -149,7 +152,12 @@ class Command(BaseCommand):
                 department=Department.objects.get(name=job['department']) if job.get('department') else None,
                 workType=WorkType.objects.get(name=job['workType']) if job.get('workType') else None,
                 minExperienceYears=job.get('minExperienceYears', None) if 'minExperienceYears' in job else None,
-                formSections=job.get('formSections', None) if 'formSections' in job else dict
+                idealExperienceYears=job.get('idealExperienceYears', None) if 'idealExperienceYears' in job else None,
+                formSections=job.get('formSections', None) if 'formSections' in job else dict,
+                salaryInformation=job.get('salaryInformation', 0) if 'salaryInformation' in job else 0,
+                _minSalary=job.get('_minSalary', None) if '_minSalary' in job else None,
+                _maxSalary=job.get('_maxSalary', None) if '_maxSalary' in job else None,
+                timestampPosted=timezone.now() - timezone.timedelta(days=fake.random_int(0, 30), hours=fake.random_int(0, 23), minutes=fake.random_int(0, 59))
             )
             j.save()
             if 'locations' in job and job['locations']:
@@ -166,7 +174,6 @@ class Command(BaseCommand):
                 )
             jobs.append(j)
 
-        fake = Faker()
         for j in jobs:
             applicationsToCreate = fake.random_int(0, 25)
             for _ in range(applicationsToCreate):

@@ -1,9 +1,10 @@
 'use client';
 import React from "react";
-import JobCard, { JobListType } from "./job-card";
-import JobViewFilter from "@/app/JobsView/filters";
 import {Button} from "chaya-ui";
 import {usePathname, useRouter} from "next/navigation";
+
+import JobCard, { JobListType } from "./job-card";
+import JobViewFilter, { JobFilterType } from "@/app/JobsView/filters";
 
 export type FilterTypeData = {
   name: string
@@ -18,12 +19,13 @@ export type DepartmentType = {
 };
 
 
-const JobsView = ({ jobs, locations, departments, workplaceModels, workplaceTypes }: {
+const JobsView = ({ jobs, locations, departments, workplaceModels, workTypes, filters }: {
   jobs: JobListType[]
   locations: FilterTypeData[]
   departments: DepartmentType[]
   workplaceModels: FilterTypeData[]
-  workplaceTypes: FilterTypeData[]
+  workTypes: FilterTypeData[],
+  filters: JobFilterType
 }) => {
 
   const router = useRouter();
@@ -32,12 +34,15 @@ const JobsView = ({ jobs, locations, departments, workplaceModels, workplaceType
   return (
     <section className="container max-w-[900px] mx-auto">
       <div className="flex flex-col gap-2">
-        <JobViewFilter
-          locations={locations}
-          departments={departments}
-          workplaceModels={workplaceModels}
-          workplaceTypes={workplaceTypes}
-        />
+        <div className="pt-4 pb-2">
+          <JobViewFilter
+            locations={locations}
+            departments={departments}
+            workplaceModels={workplaceModels}
+            workTypes={workTypes}
+            filters={filters}
+          />
+        </div>
         {jobs && jobs.length > 0 ? departments.filter((department) =>
           department.parent === null &&
           departments.filter((d) =>
@@ -57,13 +62,18 @@ const JobsView = ({ jobs, locations, departments, workplaceModels, workplaceType
                 && subDepartment.hasJobs
                 && jobs.filter((j) => j.department.id == subDepartment.id).length
               ).map((subDepartment) => (
-                <div key={subDepartment.id} className="flex flex-col w-full gap-3 px-2 py-5">
-                  <h3 className="text-lg md:text-xl font-semibold py-1 opacity-70">
+                <div key={subDepartment.id} className="flex flex-col w-full gap-0 px-2 py-5">
+                  <h3 className="text-lg md:text-xl font-semibold py-1 mb-3 opacity-70">
                     {subDepartment.name}
                   </h3>
                   {jobs && jobs?.length > 0 ?
-                    jobs.filter((job) => job.department.id === subDepartment.id).map((job) => (
-                      <JobCard key={job.id} job={job}/>
+                    jobs.filter((job) => job.department.id === subDepartment.id).map((job, index) => (
+                      <JobCard
+                        key={job.id}
+                        job={job}
+                        firstCard={index === 0}
+                        lastCard={index === jobs.filter((job) => job.department.id === subDepartment.id).length - 1}
+                      />
                     )) : null}
                 </div>
               ))}
